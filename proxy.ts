@@ -5,18 +5,39 @@ import type { NextRequest } from 'next/server';
 export default auth((req) => {
   const { nextUrl, auth: session } = req as NextRequest & { auth: { user: { role?: string } } | null };
   const pathname = nextUrl.pathname;
+  const userRole = session?.user?.role || '';
 
-  // Admin routes
-  if (pathname.startsWith('/admin')) {
+  // Super Admin only routes
+  if (pathname.startsWith('/admin/audit-logs')) {
     if (!session?.user) {
       return NextResponse.redirect(new URL('/login', nextUrl));
     }
-    if (!['admin', 'super_admin'].includes(session.user.role || '')) {
+    if (userRole !== 'super_admin') {
       return NextResponse.redirect(new URL('/unauthorized', nextUrl));
     }
   }
 
-  // Student/mentor protected routes
+  // Admin routes (admin & super_admin)
+  if (pathname.startsWith('/admin')) {
+    if (!session?.user) {
+      return NextResponse.redirect(new URL('/login', nextUrl));
+    }
+    if (!['admin', 'super_admin'].includes(userRole)) {
+      return NextResponse.redirect(new URL('/unauthorized', nextUrl));
+    }
+  }
+
+  // Mentor routes (mentor, admin, & super_admin)
+  if (pathname.startsWith('/mentor')) {
+    if (!session?.user) {
+      return NextResponse.redirect(new URL('/login', nextUrl));
+    }
+    if (!['mentor', 'admin', 'super_admin'].includes(userRole)) {
+      return NextResponse.redirect(new URL('/unauthorized', nextUrl));
+    }
+  }
+
+  // Protected student/user routes
   if (
     pathname.startsWith('/dashboard') ||
     pathname.startsWith('/my-internships') ||
@@ -27,16 +48,6 @@ export default auth((req) => {
   ) {
     if (!session?.user) {
       return NextResponse.redirect(new URL('/login', nextUrl));
-    }
-  }
-
-  // Mentor routes
-  if (pathname.startsWith('/mentor')) {
-    if (!session?.user) {
-      return NextResponse.redirect(new URL('/login', nextUrl));
-    }
-    if (!['mentor', 'admin', 'super_admin'].includes(session.user.role || '')) {
-      return NextResponse.redirect(new URL('/unauthorized', nextUrl));
     }
   }
 

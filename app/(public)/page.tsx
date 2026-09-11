@@ -1,6 +1,7 @@
 import { HeroSection } from '@/components/home/HeroSection';
 import { StatsSection } from '@/components/home/StatsSection';
 import { FeaturedInternships } from '@/components/home/FeaturedInternships';
+import { DirectorDesk } from '@/components/home/DirectorDesk';
 import { TestimonialsSection } from '@/components/home/TestimonialsSection';
 import { CTASection } from '@/components/home/CTASection';
 import { generateMetadata as genMeta } from '@/lib/seo';
@@ -16,6 +17,7 @@ export default function HomePage() {
       <HeroSection />
       <StatsSection />
       <FeaturedInternships />
+      <DirectorDesk />
       <TestimonialsSection />
       <CTASection />
     </>

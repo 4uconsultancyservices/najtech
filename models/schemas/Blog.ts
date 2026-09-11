@@ -19,7 +19,6 @@ const BlogSchema = new Schema(
   },
   { timestamps: true }
 );
-BlogSchema.index({ slug: 1 });
 BlogSchema.index({ status: 1, publishedAt: -1 });
 
 export const Blog = getModel('Blog', BlogSchema);

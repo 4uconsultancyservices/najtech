@@ -57,13 +57,26 @@ export function InternshipDetail({ internship }: InternshipDetailProps) {
 
   const handleAddToCart = () => {
     addItem({
-      internshipId: internship._id,
+      id: internship._id,
       title: internship.title,
       price: internship.price,
       discountPrice: internship.discountPrice,
-      thumbnail: internship.thumbnail,
+      duration: internship.duration,
+      image: internship.thumbnail,
     });
     toast.success('Added to cart!');
+  };
+
+  const handleEnrollNow = () => {
+    addItem({
+      id: internship._id,
+      title: internship.title,
+      price: internship.price,
+      discountPrice: internship.discountPrice,
+      duration: internship.duration,
+      image: internship.thumbnail,
+    });
+    window.location.href = '/cart';
   };
 
   const resourceIcon = (type: string) => {
@@ -266,7 +279,7 @@ export function InternshipDetail({ internship }: InternshipDetailProps) {
                 </div>
 
                 <div className="space-y-3 mb-5">
-                  <Button className="w-full" size="lg" variant="gradient" leftIcon={<Zap className="w-4 h-4" />}>
+                  <Button className="w-full" size="lg" variant="gradient" leftIcon={<Zap className="w-4 h-4" />} onClick={handleEnrollNow}>
                     Enroll Now
                   </Button>
                   <Button className="w-full" size="lg" variant="outline" leftIcon={<ShoppingCart className="w-4 h-4" />} onClick={handleAddToCart}>

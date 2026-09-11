@@ -8,6 +8,7 @@ import mongoose from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/internvault';
 
 async function seed() {
+  console.log(MONGODB_URI)
   await mongoose.connect(MONGODB_URI);
   console.log('✅ Connected to MongoDB');
 
@@ -44,6 +45,16 @@ async function seed() {
       updatedAt: new Date(),
     },
     {
+      name: 'Operations Admin',
+      email: 'admin.ops@internvault.com',
+      password: hashedPw,
+      role: 'admin',
+      isActive: true,
+      isEmailVerified: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
       name: 'Rahul Mentor',
       email: 'mentor@internvault.com',
       password: hashedPw,
@@ -65,7 +76,7 @@ async function seed() {
     },
   ]);
 
-  const mentorUserId = users.insertedIds[1];
+  const mentorUserId = users.insertedIds[2];
 
   // Seed mentor profile
   const mentors = await db.collection('mentors').insertMany([
@@ -212,10 +223,11 @@ async function seed() {
   ]);
 
   console.log('✅ Database seeded successfully!');
-  console.log('\n📋 Test Credentials:');
-  console.log('  Admin:   admin@internvault.com / Admin@123');
-  console.log('  Mentor:  mentor@internvault.com / Admin@123');
-  console.log('  Student: student@internvault.com / Admin@123');
+  console.log('\n📋 Test Credentials Across All 4 Roles:');
+  console.log('  1. Super Admin: admin@internvault.com     / Admin@123 (role: super_admin)');
+  console.log('  2. Ops Admin:   admin.ops@internvault.com / Admin@123 (role: admin)');
+  console.log('  3. Mentor:      mentor@internvault.com    / Admin@123 (role: mentor)');
+  console.log('  4. Student:     student@internvault.com   / Admin@123 (role: student)');
   await mongoose.disconnect();
 }
 

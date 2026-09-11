@@ -42,7 +42,7 @@ export function Footer() {
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
               <span className="font-syne font-bold text-xl">
-                Intern<span className="text-primary">Vault</span>
+                Naj<span className="text-primary">Tech</span>
               </span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed mb-6 max-w-xs">
@@ -96,7 +96,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Mail className="w-4 h-4 flex-shrink-0" />
-                <a href="mailto:hello@internvault.com" className="hover:text-foreground transition-colors">hello@internvault.com</a>
+                <a href="mailto:alauddinkhan.aurangabad@gmail.com" className="hover:text-foreground transition-colors">alauddinkhan.aurangabad@gmail.com</a>
               </li>
               <li className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Phone className="w-4 h-4 flex-shrink-0" />
@@ -120,7 +120,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} NajTech. All rights reserved.
+            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> NajTech. All rights reserved.
           </p>
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Made with</span>

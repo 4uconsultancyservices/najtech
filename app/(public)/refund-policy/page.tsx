@@ -46,7 +46,7 @@ export default function RefundPolicyPage() {
             },
             {
               title: '3. How to Request a Refund',
-              content: `To request a refund, please contact our support team at refunds@internvault.com with your order number and reason for the refund. Our team will review your request and respond within 3–5 business days. If approved, refunds will be processed to your original payment method within 7–10 business days.`,
+              content: `To request a refund, please contact our support team at alauddinkhan.aurangabad@gmail.com with your order number and reason for the refund. Our team will review your request and respond within 3–5 business days. If approved, refunds will be processed to your original payment method within 7–10 business days.`,
             },
             {
               title: '4. Technical Issues',
@@ -58,7 +58,7 @@ export default function RefundPolicyPage() {
             },
             {
               title: '6. Contact Us',
-              content: `For refund-related queries, contact us at refunds@internvault.com or call +91 80000 00000 (Mon–Fri, 9 AM–6 PM IST). Please have your order number ready for faster resolution.`,
+              content: `For refund-related queries, contact us at alauddinkhan.aurangabad@gmail.com or call +91 80000 00000 (Mon–Fri, 9 AM–6 PM IST). Please have your order number ready for faster resolution.`,
             },
           ].map(({ title, content }) => (
             <div key={title} className="bg-card border border-border rounded-2xl p-6">

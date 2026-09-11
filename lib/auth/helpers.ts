@@ -14,6 +14,16 @@ export function hasPermission(userRole: UserRole, requiredRole: UserRole): boole
   return roleHierarchy[userRole] >= roleHierarchy[requiredRole];
 }
 
+export function hasRole(userRole: UserRole | undefined, allowedRoles: UserRole[]): boolean {
+  if (!userRole) return false;
+  return allowedRoles.includes(userRole);
+}
+
+export function hasMinimumRole(userRole: UserRole | undefined, minimumRole: UserRole): boolean {
+  if (!userRole) return false;
+  return roleHierarchy[userRole] >= roleHierarchy[minimumRole];
+}
+
 export async function getAuthSession() {
   return auth();
 }
@@ -35,12 +45,30 @@ export async function requireRole(role: UserRole) {
   return session;
 }
 
+export async function requireSuperAdmin() {
+  return requireRole('super_admin');
+}
+
 export async function requireAdmin() {
-  return requireRole('admin');
+  const session = await requireAuth();
+  const userRole = session.user.role as UserRole;
+  if (!hasRole(userRole, ['admin', 'super_admin'])) {
+    redirect('/unauthorized');
+  }
+  return session;
 }
 
 export async function requireMentor() {
-  return requireRole('mentor');
+  const session = await requireAuth();
+  const userRole = session.user.role as UserRole;
+  if (!hasRole(userRole, ['mentor', 'admin', 'super_admin'])) {
+    redirect('/unauthorized');
+  }
+  return session;
+}
+
+export async function requireStudent() {
+  return requireAuth();
 }
 
 export function generateOTP(): string {

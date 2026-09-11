@@ -13,13 +13,13 @@ export function FeaturedInternships() {
   const [internships, setInternships] = useState<[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   fetch('/api/internships?featured=true&limit=6')
-  //     .then((r) => r.json())
-  //     .then((d) => setInternships(d.data || []))
-  //     .catch(() => {})
-  //     .finally(() => setLoading(false));
-  // }, []);
+  useEffect(() => {
+    fetch('/api/internships?featured=true&limit=6')
+      .then((r) => r.json())
+      .then((d) => setInternships(d.data || []))
+      .catch(() => { })
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <section ref={ref} className="py-24 bg-background">

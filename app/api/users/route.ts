@@ -50,9 +50,9 @@ export async function PATCH(request: NextRequest) {
     await connectDB();
     const { userId, ...updateData } = await request.json();
 
-    // Prevent role escalation
-    if (updateData.role === 'super_admin' && session.user.role !== 'super_admin') {
-      return errorResponse('Cannot assign super_admin role', 403);
+    // Restrict role modification to super_admin
+    if (updateData.role && session.user.role !== 'super_admin') {
+      return errorResponse('Only Super Admins can modify user roles', 403);
     }
 
     const user = await User.findByIdAndUpdate(userId, updateData, { new: true });
