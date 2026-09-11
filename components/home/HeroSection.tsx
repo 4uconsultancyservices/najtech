@@ -29,7 +29,7 @@ const container = {
 
 const item = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
 export function HeroSection() {
@@ -142,7 +142,7 @@ export function HeroSection() {
 
           {/* Trust badges */}
           <motion.div variants={item} className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <span className="text-sm text-muted-foreground">Trusted by graduates from:</span>
+            {/* <span className="text-sm text-muted-foreground">Trusted by graduates from:</span>
             {['IIT', 'NIT', 'BITS', 'VIT', 'IIIT'].map((uni) => (
               <span
                 key={uni}
@@ -150,7 +150,7 @@ export function HeroSection() {
               >
                 {uni}
               </span>
-            ))}
+            ))} */}
           </motion.div>
         </motion.div>
       </motion.div>

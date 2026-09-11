@@ -13,9 +13,20 @@ export async function POST(request: NextRequest) {
 
   try {
     await connectDB();
-    const { internshipId, couponCode, provider = 'razorpay' } = await request.json();
+    const {
+      internshipId,
+      couponCode,
+      provider = 'razorpay',
+      utrNumber,
+      senderUpiId,
+      paymentNotes,
+    } = await request.json();
 
     if (!internshipId) return errorResponse('Internship ID is required', 400);
+
+    if (provider === 'upi_qr' && !utrNumber?.trim()) {
+      return errorResponse('UTR / Transaction Reference Number is required for UPI QR payments', 400);
+    }
 
     const internship = await Internship.findById(internshipId);
     if (!internship || internship.status !== 'published') {
@@ -69,6 +80,9 @@ export async function POST(request: NextRequest) {
       currency: internship.currency || 'INR',
       status: 'pending',
       paymentProvider: provider,
+      utrNumber: utrNumber?.trim(),
+      senderUpiId: senderUpiId?.trim(),
+      paymentNotes: paymentNotes?.trim(),
       couponId: coupon?._id,
       discountAmount,
       finalAmount,

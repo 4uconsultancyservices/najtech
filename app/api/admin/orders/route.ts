@@ -23,14 +23,17 @@ export async function GET(request: NextRequest) {
     if (search) {
       query.$or = [
         { orderNumber: { $regex: search, $options: 'i' } },
+        { utrNumber: { $regex: search, $options: 'i' } },
+        { senderUpiId: { $regex: search, $options: 'i' } },
       ];
     }
 
     const [orders, total, revenueData] = await Promise.all([
       Order.find(query)
-        .populate('studentId', 'name email')
-        .populate('internshipId', 'title')
-        .populate('couponId', 'code')
+        .populate('studentId', 'name email role')
+        .populate('internshipId', 'title slug thumbnail duration price discountPrice')
+        .populate('couponId', 'code value type')
+        .populate('verifiedBy', 'name email')
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)

@@ -117,18 +117,26 @@ export function Navbar() {
                         className="absolute right-0 mt-2 w-56 bg-card border border-border rounded-xl shadow-xl overflow-hidden"
                       >
                         <div className="px-4 py-3 border-b border-border">
-                          <p className="text-sm font-semibold text-foreground">{session.user.name}</p>
-                          <p className="text-xs text-muted-foreground">{session.user.email}</p>
+                          <div className="flex items-center justify-between">
+                            <p className="text-sm font-semibold text-foreground truncate">{session.user.name}</p>
+                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary capitalize">
+                              {session.user.role?.replace('_', ' ') || 'Student'}
+                            </span>
+                          </div>
+                          <p className="text-xs text-muted-foreground truncate mt-0.5">{session.user.email}</p>
                         </div>
                         <div className="py-1">
-                          <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent transition-colors">Dashboard</Link>
+                          <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent transition-colors">Student Dashboard</Link>
+                          {['mentor', 'admin', 'super_admin'].includes(session.user.role as string) && (
+                            <Link href="/mentor/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-indigo-500 font-medium hover:bg-accent transition-colors">Mentor Portal</Link>
+                          )}
+                          {['admin', 'super_admin'].includes(session.user.role as string) && (
+                            <Link href="/admin/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-primary font-medium hover:bg-accent transition-colors">Admin Panel</Link>
+                          )}
                           <Link href="/my-internships" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent transition-colors">My Internships</Link>
                           <Link href="/certificates" className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent transition-colors">Certificates</Link>
-                          {['admin', 'super_admin'].includes(session.user.role as string) && (
-                            <Link href="/admin/dashboard" className="flex items-center gap-2 px-4 py-2 text-sm text-primary hover:bg-accent transition-colors">Admin Panel</Link>
-                          )}
                           <div className="border-t border-border mt-1">
-                            <button onClick={() => signOut()} className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">
+                            <button onClick={() => signOut()} className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors font-medium">
                               Sign Out
                             </button>
                           </div>

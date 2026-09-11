@@ -94,7 +94,6 @@ const InternshipSchema = new Schema<IInternshipDocument>(
   { timestamps: true }
 );
 
-InternshipSchema.index({ slug: 1 });
 InternshipSchema.index({ status: 1 });
 InternshipSchema.index({ categoryId: 1 });
 InternshipSchema.index({ isFeatured: 1 });

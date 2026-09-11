@@ -108,3 +108,47 @@ export async function POST(request: NextRequest) {
     return errorResponse('Failed to submit assignment', 500);
   }
 }
+
+export async function PATCH(request: NextRequest) {
+  const session = await auth();
+  if (!session?.user) return errorResponse('Unauthorized', 401);
+
+  const role = session.user.role as string;
+  if (!['mentor', 'admin', 'super_admin'].includes(role)) {
+    return errorResponse('Only mentors and admins can grade assignments', 403);
+  }
+
+  try {
+    await connectDB();
+    const { assignmentId, status, mentorFeedback, mentorRating } = await request.json();
+
+    if (!assignmentId || !status) {
+      return errorResponse('Assignment ID and status are required', 400);
+    }
+
+    const assignment = await Assignment.findById(assignmentId);
+    if (!assignment) return errorResponse('Assignment not found', 404);
+
+    assignment.status = status;
+    if (mentorFeedback !== undefined) assignment.mentorFeedback = mentorFeedback;
+    if (mentorRating !== undefined) assignment.mentorRating = mentorRating;
+    assignment.reviewedAt = new Date();
+    assignment.reviewedBy = session.user.id;
+
+    await assignment.save();
+
+    // Send notification to student
+    await Notification.create({
+      userId: assignment.studentId,
+      title: status === 'reviewed' ? 'Assignment Approved' : 'Assignment Review Update',
+      message: `Your assignment "${assignment.title}" has been reviewed by your mentor.`,
+      type: status === 'reviewed' ? 'success' : 'warning',
+      link: '/assignments',
+    });
+
+    return successResponse(assignment, 'Assignment review updated successfully');
+  } catch (error) {
+    console.error('[ASSIGNMENTS_PATCH]', error);
+    return errorResponse('Failed to review assignment', 500);
+  }
+}

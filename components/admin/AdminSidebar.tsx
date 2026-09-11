@@ -21,7 +21,7 @@ const navGroups = [
   {
     label: 'Users',
     items: [
-      { href: '/admin/users', icon: Users, label: 'Students' },
+      { href: '/admin/users', icon: Users, label: 'User Directory' },
       { href: '/admin/mentors', icon: UserCheck, label: 'Mentors' },
     ],
   },
@@ -53,7 +53,7 @@ const navGroups = [
       { href: '/admin/theme', icon: Palette, label: 'Theme Builder' },
       { href: '/admin/seo', icon: Search, label: 'SEO Management' },
       { href: '/admin/notifications', icon: Bell, label: 'Notifications' },
-      { href: '/admin/audit-logs', icon: Shield, label: 'Audit Logs' },
+      { href: '/admin/audit-logs', icon: Shield, label: 'Audit Logs', superAdminOnly: true },
     ],
   },
 ];
@@ -64,6 +64,7 @@ interface AdminSidebarProps {
 
 export function AdminSidebar({ user }: AdminSidebarProps) {
   const pathname = usePathname();
+  const isSuperAdmin = user.role === 'super_admin';
 
   return (
     <aside className="hidden lg:flex flex-col w-72 bg-card border-r border-border fixed inset-y-0 left-0 z-40">
@@ -77,13 +78,31 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
             Naj<span className="text-primary">Tech</span>
           </span>
         </Link>
-        <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-md ml-10">
-          Admin Panel
-        </span>
+        <div className="flex items-center gap-2 mt-1">
+          <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${
+            isSuperAdmin ? 'bg-purple-500/10 text-purple-600 border border-purple-500/20' : 'bg-primary/10 text-primary'
+          }`}>
+            {isSuperAdmin ? 'Super Admin Panel' : 'Admin Panel'}
+          </span>
+        </div>
       </div>
 
       {/* Nav */}
       <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
+        <div>
+          <div className="px-3 mb-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+            Quick Switch
+          </div>
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-accent border border-dashed border-border transition-all"
+          >
+            <GraduationCap className="w-4 h-4 text-indigo-500" />
+            <span>Student Dashboard</span>
+            <ChevronRight className="w-3.5 h-3.5 ml-auto text-muted-foreground" />
+          </Link>
+        </div>
+
         {navGroups.map((group) => (
           <div key={group.label}>
             <div className="px-3 mb-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
@@ -91,6 +110,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
             </div>
             <div className="space-y-0.5">
               {group.items.map((item) => {
+                if (item.superAdminOnly && !isSuperAdmin) return null;
                 const active = pathname === item.href || pathname.startsWith(item.href + '/');
                 return (
                   <Link
@@ -122,12 +142,12 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xs font-semibold text-foreground truncate">{user.name}</p>
-            <p className="text-[10px] text-muted-foreground capitalize">{user.role?.replace('_', ' ')}</p>
+            <p className="text-[10px] text-primary font-bold capitalize">{user.role?.replace('_', ' ')}</p>
           </div>
         </div>
         <button
           onClick={() => signOut({ callbackUrl: '/' })}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all"
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-muted-foreground hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all font-medium"
         >
           <LogOut className="w-4 h-4" />
           Sign Out

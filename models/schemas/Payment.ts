@@ -5,7 +5,7 @@ const PaymentSchema = new Schema(
   {
     orderId: { type: Schema.Types.ObjectId, ref: 'Order', required: true },
     studentId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    provider: { type: String, enum: ['razorpay', 'phonepe'], required: true },
+    provider: { type: String, enum: ['razorpay', 'phonepe', 'upi_qr', 'test'], required: true },
     providerId: { type: String, required: true },
     providerOrderId: String,
     amount: { type: Number, required: true },

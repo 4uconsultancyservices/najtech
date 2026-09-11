@@ -6,8 +6,8 @@ import { successResponse, errorResponse, paginatedResponse, getPaginationParams 
 
 export async function GET(request: NextRequest) {
   const session = await auth();
-  if (!session?.user || !['admin', 'super_admin'].includes(session.user.role as string)) {
-    return errorResponse('Unauthorized', 401);
+  if (!session?.user || session.user.role !== 'super_admin') {
+    return errorResponse('Forbidden: Audit logs are restricted to Super Admins', 403);
   }
 
   try {

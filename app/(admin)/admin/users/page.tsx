@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, Loader2, Users, MoreVertical, CheckCircle, XCircle } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { Search, Loader2, Users, MoreVertical, CheckCircle, XCircle, ShieldAlert } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
 import { toast } from '@/components/ui/Toaster';
 
@@ -25,6 +26,9 @@ const ROLE_COLORS: Record<string, string> = {
 };
 
 export default function AdminUsersPage() {
+  const { data: session } = useSession();
+  const isSuperAdmin = session?.user?.role === 'super_admin';
+
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -196,16 +200,25 @@ export default function AdminUsersPage() {
                               {user.isActive ? 'Deactivate User' : 'Activate User'}
                             </button>
                             <div className="border-t border-border my-1" />
-                            <div className="px-3 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Change Role</div>
-                            {['student', 'mentor', 'admin'].map((role) => (
-                              <button
-                                key={role}
-                                onClick={() => changeRole(user._id, role)}
-                                className={`w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors capitalize ${user.role === role ? 'text-primary font-medium' : ''}`}
-                              >
-                                {role}
-                              </button>
-                            ))}
+                            {isSuperAdmin ? (
+                              <>
+                                <div className="px-3 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Assign Role</div>
+                                {['student', 'mentor', 'admin', 'super_admin'].map((role) => (
+                                  <button
+                                    key={role}
+                                    onClick={() => changeRole(user._id, role)}
+                                    className={`w-full text-left px-4 py-2 text-sm hover:bg-accent transition-colors capitalize ${user.role === role ? 'text-primary font-medium' : ''}`}
+                                  >
+                                    {role.replace('_', ' ')}
+                                  </button>
+                                ))}
+                              </>
+                            ) : (
+                              <div className="px-3 py-2 text-[11px] text-muted-foreground italic flex items-center gap-1.5 bg-muted/50">
+                                <ShieldAlert className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />
+                                <span>Role changes require Super Admin access</span>
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>

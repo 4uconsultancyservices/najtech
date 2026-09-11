@@ -45,7 +45,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   loading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -65,7 +65,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ) : (
           leftIcon
         )}
-        {children && <span className={variant === 'gradient' ? 'relative z-10' : ''}>{children}</span>}
+        {children && (variant === 'gradient' ? <span className="relative z-10">{children}</span> : children)}
         {!loading && rightIcon}
       </button>
     );

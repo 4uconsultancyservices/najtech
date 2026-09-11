@@ -43,7 +43,7 @@ export default function PrivacyPolicyPage() {
             },
             {
               title: '7. Contact Us',
-              content: `If you have questions about this Privacy Policy, please contact us at privacy@internvault.com or write to us at NajTech, Bangalore, Karnataka, India.`,
+              content: `If you have questions about this Privacy Policy, please contact us at alauddinkhan.aurangabad@gmail.com or write to us at NajTech, Bangalore, Karnataka, India.`,
             },
           ].map(({ title, content }) => (
             <div key={title} className="bg-card border border-border rounded-2xl p-6">

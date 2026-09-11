@@ -1,5 +1,6 @@
 import { generateMetadata as genMeta } from '@/lib/seo';
 import { Target, Heart, Globe, TrendingUp, Users, Award, BookOpen, Star } from 'lucide-react';
+import { DirectorDesk } from '@/components/home/DirectorDesk';
 
 export const metadata = genMeta({
   title: 'About Us',
@@ -70,6 +71,9 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* Director Desk */}
+      <DirectorDesk />
 
       {/* Values */}
       <section className="py-20 bg-card border-y border-border">

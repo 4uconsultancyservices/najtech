@@ -30,7 +30,7 @@ export default function ContactPage() {
   };
 
   const contactInfo = [
-    { icon: Mail, label: 'Email', value: 'hello@internvault.com', href: 'mailto:hello@internvault.com' },
+    { icon: Mail, label: 'Email', value: 'alauddinkhan.aurangabad@gmail.com', href: 'mailto:alauddinkhan.aurangabad@gmail.com' },
     { icon: Phone, label: 'Phone', value: '+91 80000 00000', href: 'tel:+918000000000' },
     { icon: MapPin, label: 'Location', value: 'Bangalore, Karnataka, India', href: '#' },
   ];

@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Clock, Star, Users, BookOpen, ArrowRight, Award } from 'lucide-react';
+import { Clock, Star, Users, BookOpen, ArrowRight, Award, ShoppingCart, Check } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
+import { useCartStore } from '@/store';
+import { toast } from '@/components/ui/Toaster';
 
 interface InternshipCardProps {
   internship: {
@@ -29,9 +31,31 @@ interface InternshipCardProps {
 }
 
 export function InternshipCard({ internship, index = 0 }: InternshipCardProps) {
+  const { items, addItem } = useCartStore();
+  const isInCart = items.some((item) => item.internshipId === internship._id);
+
   const discount = internship.discountPrice
     ? Math.round(((internship.price - internship.discountPrice) / internship.price) * 100)
     : 0;
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isInCart) {
+      toast.info('Item is already in your cart!');
+      return;
+    }
+    addItem({
+      internshipId: internship._id,
+      title: internship.title,
+      slug: internship.slug,
+      thumbnail: internship.thumbnail,
+      price: internship.price,
+      discountPrice: internship.discountPrice,
+      duration: internship.duration,
+    });
+    toast.success('Added to cart!');
+  };
 
   return (
     <motion.div
@@ -134,14 +158,27 @@ export function InternshipCard({ internship, index = 0 }: InternshipCardProps) {
                 </span>
               )}
             </div>
-            <Link href={`/internships/${internship.slug}`}>
-              <Button size="sm" variant="outline" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
-                View
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant={isInCart ? 'secondary' : 'ghost'}
+                onClick={handleAddToCart}
+                title={isInCart ? 'In Cart' : 'Add to Cart'}
+                aria-label="Add to cart"
+                className="px-2.5"
+              >
+                {isInCart ? <Check className="w-4 h-4 text-emerald-500" /> : <ShoppingCart className="w-4 h-4 text-muted-foreground hover:text-foreground" />}
               </Button>
-            </Link>
+              <Link href={`/internships/${internship.slug}`}>
+                <Button size="sm" variant="outline" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
+                  View
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
     </motion.div>
   );
 }
+
